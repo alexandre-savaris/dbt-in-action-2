@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: int_customer_region
+    description: "Intermediate model that maps customers to regions."
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+      - name: region
+        description: "Region mapped from country."
+        tests:
+          - not_null

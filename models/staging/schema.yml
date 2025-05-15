@@ -1,0 +1,38 @@
+version: 2
+
+sources:
+  - name: raw_data
+    schema: raw_data
+    tables:
+      - name: customers
+        description: "Seeded customers table"
+      - name: region_mapping
+        description: "Seeded country-region mapping table"
+      - name: sales
+        description: "Seeded sales table"
+
+models:
+  - name: stg_customers
+    description: "Staging model for customers before enrichment."
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        tests:
+          - not_null
+      - name: country
+        tests:
+          - not_null
+
+  - name: stg_region_mapping
+    description: "Staging model for country-region mapping."
+    columns:
+      - name: country
+        tests:
+          - unique
+          - not_null
+      - name: region
+        tests:
+          - not_null

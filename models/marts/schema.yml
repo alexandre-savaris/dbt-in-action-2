@@ -1,0 +1,60 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Customer dimension table with region mapping."
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        tests:
+          - not_null
+      - name: country
+        tests:
+          - not_null
+      - name: region
+        tests:
+          - not_null
+
+  - name: fact_sales
+    description: "Fact table containing customer purchases."
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: order_date
+        tests:
+          - not_null
+      - name: total_amount
+        tests:
+          - not_null
+          - is_positive
+
+  - name: agg_customer_spend
+    description: "Aggregated customer spending with spend category."
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: total_spend
+        tests:
+          - not_null
+          - is_positive
+      - name: spend_category
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Low', 'Medium', 'High']
